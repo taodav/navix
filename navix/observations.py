@@ -231,8 +231,9 @@ def rgb_first_person(state: State) -> Array:
     player = state.get_player()
 
     # get sprites aligned to player's direction
-    sprites = state.get_sprites_first_person()  # (n_sprites, TILE_SIZE, TILE_SIZE, 3)
-    # sprites = jax.vmap(lambda x: align(x, jnp.asarray(0), alignment_direction))(sprites)
+    sprites = state.get_sprites()
+    player = state.get_player()
+    sprites = jax.vmap(lambda x: align(x, jnp.asarray(0), player.direction))(sprites)
 
     # draw grid lines on tiles
     # sprites = jax.vmap(lambda x: draw_grid_lines(x))(sprites)
