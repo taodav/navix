@@ -233,6 +233,7 @@ def rgb_first_person(state: State) -> Array:
 
     # get sprites aligned to player's direction
     sprites = state.get_sprites()
+    player = state.get_player()
     sprites = jax.vmap(lambda x: align(x, jnp.asarray(0), player.direction))(sprites)
 
     # align sprites to player's direction
