@@ -31,7 +31,7 @@ from .grid import align, idx_from_coordinates, crop, view_cone
 from .entities import EntityIds
 
 
-RADIUS = 3
+RADIUS = 2
 
 
 def none(state: State) -> Array:
@@ -82,7 +82,7 @@ def categorical_first_person(state: State) -> Array:
     transparency_map = jnp.where(state.grid == 0, 1, 0)
     positions = state.get_positions()
     transparent = state.get_transparency()
-    transparency_map = transparency_map.at[tuple(positions.T)].set(~transparent)
+    transparency_map = transparency_map.at[tuple(positions.T)].set(transparent)
 
     # apply view mask
     player = state.get_player()
