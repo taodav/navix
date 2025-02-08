@@ -38,7 +38,7 @@ from .grid import (
 from .entities import EntityIds
 
 
-RADIUS = 2
+RADIUS = 1
 
 
 def set_radius(radius: int):
