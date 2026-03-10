@@ -81,6 +81,45 @@ def test_keydoor():
     jax.jit(f)()
 
 
+def test_keycorridor():
+    def f():
+        env = nx.environments.KeyCorridor.create(
+            height=3,
+            width=7,
+            max_steps=16,
+            observation_fn=nx.observations.symbolic_first_person,
+        )
+        key = jax.random.PRNGKey(0)
+        reset = jax.jit(env._reset)
+        step = jax.jit(env.step)
+        timestep = reset(key)
+        # Seed 0 has a blue locked door on the right.
+        actions = (
+            0,  # rotate_ccw
+            5,  # toggle
+            2,  # forward
+            3,  # pick-up
+            1,  # rotate_cw
+            1,  # rotate_cw
+            2,  # forward
+            5,  # toggle
+            2,  # forward
+            2,  # forward
+        )
+        print(timestep)
+        for action in actions:
+            timestep = step(timestep, jnp.asarray(action))
+            print()
+            print(nx.actions.DEFAULT_ACTION_SET[action])
+            print(timestep)
+        assert timestep.is_done()
+        assert timestep.reward > 0.0
+        return timestep
+
+    f()
+    jax.jit(f)()
+
+
 def test_keydoor2():
     env = nx.environments.DoorKey.create(5, 7, 100, observation_fn=nx.observations.rgb)
 
@@ -93,4 +132,5 @@ if __name__ == "__main__":
     # test_room()
     # jax.jit(test_room)()
     test_keydoor()
+    test_keycorridor()
     # test_keydoor2()
