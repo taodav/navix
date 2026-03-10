@@ -293,7 +293,7 @@ class EventsManager(struct.PyTreeNode):
         idx = jnp.where(door.position == position, size=1)[0][0]
         door = door[idx]
         return self.replace(
-            door_opening=Event(
+            door_unlock=Event(
                 position=door.position,
                 colour=door.colour,
                 happened=jnp.asarray(True, dtype=jnp.bool_),
