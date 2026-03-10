@@ -12,7 +12,7 @@ def test_room():
             observation_fn=nx.observations.symbolic_first_person,
         )
         key = jax.random.PRNGKey(4)
-        reset = jax.jit(env._reset)
+        reset = jax.jit(env.reset)
         step = jax.jit(env.step)
         timestep = reset(key)
         # these are optimal actios for navigation + action_cost
@@ -47,7 +47,7 @@ def test_keydoor():
             observation_fn=nx.observations.symbolic_first_person,
         )
         key = jax.random.PRNGKey(1)
-        reset = jax.jit(env._reset)
+        reset = jax.jit(env.reset)
         step = jax.jit(env.step)
         timestep = reset(key)
         #  these are optimal actions for navigation + action_cost
@@ -90,7 +90,7 @@ def test_keycorridor():
             observation_fn=nx.observations.symbolic_first_person,
         )
         key = jax.random.PRNGKey(0)
-        reset = jax.jit(env._reset)
+        reset = jax.jit(env.reset)
         step = jax.jit(env.step)
         timestep = reset(key)
         # Seed 0 has a blue locked door on the right.
@@ -112,12 +112,12 @@ def test_keycorridor():
             print()
             print(nx.actions.DEFAULT_ACTION_SET[action])
             print(timestep)
-        assert timestep.is_done()
-        assert timestep.reward > 0.0
         return timestep
 
     f()
-    jax.jit(f)()
+    timestep = jax.jit(f)()
+    assert timestep.is_done()
+    assert timestep.reward > 0.0
 
 
 def test_keydoor2():
